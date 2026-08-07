@@ -570,7 +570,11 @@ export class KanbanView extends BasesView {
 				if (isInitialOrder) {
 					this._prefs.swimlaneOrder = this._sortSwimlaneValues(newLaneValues);
 				} else {
-					this._prefs.swimlaneOrder = [...this._prefs.swimlaneOrder, ...newLaneValues];
+					this._prefs.swimlaneOrder = [
+						...this._prefs.swimlaneOrder.slice(0, -1),
+						...newLaneValues,
+						this._prefs.swimlaneOrder[-1],
+					];
 				}
 				this._persistPrefs();
 			}
@@ -729,7 +733,11 @@ export class KanbanView extends BasesView {
 				if (isInitialOrder) {
 					this._prefs.swimlaneOrder = this._sortSwimlaneValues(newLaneValues);
 				} else {
-					this._prefs.swimlaneOrder = [...this._prefs.swimlaneOrder, ...newLaneValues];
+					this._prefs.swimlaneOrder = [
+						...this._prefs.swimlaneOrder.slice(0, -1),
+						...newLaneValues,
+						this._prefs.swimlaneOrder[-1],
+					];
 				}
 				this._persistPrefs();
 			}
@@ -1461,7 +1469,7 @@ export class KanbanView extends BasesView {
 		const entryMap = new Map(entries.map((e) => [e.file.path, e]));
 		const ordered = savedOrder.map((p) => entryMap.get(p)).filter((e): e is BasesEntry => e !== undefined);
 		const unsaved = entries.filter((e) => !savedOrder.includes(e.file.path));
-		return [...ordered, ...unsaved];
+		return [...unsaved, ...ordered];
 	}
 
 	onClose(): void {
